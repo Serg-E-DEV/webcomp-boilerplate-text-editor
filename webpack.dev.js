@@ -23,6 +23,11 @@ module.exports = {
       },
     ],
   },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
   devServer: {
     static: './public',
     port: 8998,

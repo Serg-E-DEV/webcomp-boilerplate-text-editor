@@ -9,6 +9,7 @@ class TextEditor extends HTMLElement {
     constructor() {
         super();
 
+        this.classList.add('text-editor');
         this.shadow = this.attachShadow(
             {mode: "open"}
         );
