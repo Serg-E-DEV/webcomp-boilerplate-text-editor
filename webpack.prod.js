@@ -11,4 +11,16 @@ module.exports = {
     filename: 'webcomp-boilerplate.min.js',
     path: path.resolve(__dirname, 'dist'),
   },
+  module: {
+    rules: [
+      {
+        test: /\.html$/i,
+        loader: 'html-loader',
+      },
+      {
+        test: /\.css$/i,
+        use: ['to-string-loader', 'css-loader'],
+      },
+    ],
+  },
 };
