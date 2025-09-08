@@ -15,11 +15,11 @@ module.exports = {
     rules: [
       {
         test: /\.html$/i,
-        loader: 'html-loader',
+        loader: 'templates-loader',
       },
       {
         test: /\.css$/i,
-        use: ['to-string-loader', 'css-loader'],
+        use: ['to-string-loader', 'styles-loader'],
       },
     ],
   },

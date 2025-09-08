@@ -2,48 +2,74 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import appHtml from './app.html';
-import appCss from './app.css';
+import appStyles from './styles/app.css';
+
+import appTpl from './templates/app.html';
+import insertPanelTpl from './templates/insert-panel.html';
+
+import {tinymceInit} from "./modules/tinymceInit";
 
 class TextEditor extends HTMLElement {
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        this.classList.add('text-editor');
-        this.shadow = this.attachShadow(
-            {mode: "open"}
-        );
+    this.attachShadow(
+      {mode: "open"}
+    );
+    this.classList.add('text-editor');
+    this.appStyles = String(appStyles);
+    this.tpl = {
+      appTpl: String(appTpl),
+      insertPanelTpl: String(insertPanelTpl)
+    }
+  }
+
+  static get observedAttributes() {
+    return ['title'];
+  }
+
+  attributeChangedCallback(propName, oldValue, newValue) {
+    console.log(`Changing "${propName}" from "${oldValue}" to "${newValue}"`);
+    if (propName === "title") {
+      this.render();
+    }
+  }
+
+  get title() {
+    return this.getAttribute("title");
+  }
+
+  set title(newTitle) {
+    this.setAttribute("title", newTitle)
+  }
+
+  async connectedCallback() {
+    this.render();
+    this.elements = {
+      styles: this.shadowRoot.querySelector('style'),
+      editor: this.shadowRoot.querySelector('.js-tinymce-editor'),
     }
 
-    static get observedAttributes() {
-        return ['title'];
-    }
+    const {editor, editorStyles} = await tinymceInit(this.elements.editor);
+    editor.setContent('<p>Начальный текст</p>');
+    editor.insertContent('<select><option>Пункт</option></select>');
+    this.editor = editor;
+    this.editor.body = editor.getBody();
 
-    attributeChangedCallback(propName, oldValue, newValue) {
-        console.log(`Changing "${propName}" from "${oldValue}" to "${newValue}"`);
-        if (propName === "title") {
-            this.render();
-        }
-    }
+    this.appStyles = this.appStyles.concat('\n', editorStyles);
 
-    get title() {
-        return this.getAttribute("title");
-    }
+    this.applyAppStyles(this.appStyles);
+  }
 
-    set title(newTitle) {
-        this.setAttribute("title", newTitle)
-    }
+  applyAppStyles(styles) {
+    this.elements.styles.textContent = styles;
+  }
 
-    connectedCallback() {
-        this.render();
-    }
-
-    render() {
-      let renderHtml = appHtml;
-      renderHtml = renderHtml.replaceAll('{{ styles }}', appCss);
-      renderHtml = renderHtml.replaceAll('{{ title }}', this.title);
-      this.shadow.innerHTML = renderHtml;
-    }
+  render() {
+    let renderHtml = this.tpl.appTpl;
+    renderHtml = renderHtml.replaceAll('{{ insertPanel }}', this.tpl.insertPanelTpl);
+    this.shadowRoot.innerHTML = renderHtml;
+  }
 }
 
 customElements.define('text-editor', TextEditor);

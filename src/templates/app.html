@@ -1,17 +1,9 @@
-<style>
-  {{ styles }}
-</style>
+<style></style>
 <div class="text-editor__main-container">
   <div class="text-editor__main">
-    <div class="text-editor__control-panel">
-      <button class="base-button" type="button">
-        <span class="base-button__icon base-button__icon_dropdown"></span>
-        dropdown
-      </button>
-    </div>
-
-    <div class="text-editor__textarea">
-      Здесь текст
+    {{ insertPanel }}
+    <div class="text-editor__editor-container">
+      <textarea class="text-editor__textarea js-tinymce-editor"></textarea>
     </div>
   </div>
   <div class="text-editor__sidebar">
