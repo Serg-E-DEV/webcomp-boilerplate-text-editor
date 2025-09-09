@@ -1,0 +1,18 @@
+<div class="edit-panel__inner">
+  <div class="edit-panel__section">
+    <div class="edit-panel__heading">Выбрать</div>
+    <div class="edit-panel__select-panel">
+      <div class="edit-panel__select-controls">
+        <button class="base-button base-button_square" type="button" data-action="add-item">+</button>
+        <button class="base-button base-button_square" type="button" data-action="remove-item" disabled>–</button>
+      </div>
+      {{ selectList }}
+    </div>
+  </div>
+
+  <div class="edit-panel__section">
+    <div class="edit-panel__heading">Изменить</div>
+    <input type="text" class="base-input" data-action="change-item">
+  </div>
+
+</div>

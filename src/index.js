@@ -2,17 +2,21 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import appStyles from './styles/app.css';
-
-import appTpl from './templates/app.html';
-import insertPanelTpl from './templates/insert-panel.html';
-
 import {tinymceInit} from "./modules/tinymceInit";
+
+import {appState} from "./appState";
+
+import appStyles from './styles/app.css';
+import appTpl from './templates/app.html';
+
+import insertPanelTpl from './templates/insert-panel.html';
+import {attachInsertHandlers} from "./modules/attachInsertHandlers";
+import {DropdownPanel} from "./modules/edit-panels/DropdownPanel";
 
 class TextEditor extends HTMLElement {
   constructor() {
     super();
-
+    this.appState = appState;
     this.attachShadow(
       {mode: "open"}
     );
@@ -48,13 +52,22 @@ class TextEditor extends HTMLElement {
     this.elements = {
       styles: this.shadowRoot.querySelector('style'),
       editor: this.shadowRoot.querySelector('.js-tinymce-editor'),
+      insertButtons: Array.from(this.shadowRoot.querySelectorAll('.js-insert-button')),
+      sidebar: this.shadowRoot.querySelector('.js-sidebar'),
     }
+
+    //TODO: позже связать с кликом на элементе в редакторе, предусмотреть отписки
+    const dropdownPanel = new DropdownPanel(this.appState);
+    dropdownPanel.mount(this.elements.sidebar);
+    //TODO: end
 
     const {editor, editorStyles} = await tinymceInit(this.elements.editor);
     editor.setContent('<p>Начальный текст</p>');
-    editor.insertContent('<select><option>Пункт</option></select>');
+
     this.editor = editor;
     this.editor.body = editor.getBody();
+
+    attachInsertHandlers(this.elements.insertButtons, this.editor);
 
     this.appStyles = this.appStyles.concat('\n', editorStyles);
 
@@ -73,3 +86,4 @@ class TextEditor extends HTMLElement {
 }
 
 customElements.define('text-editor', TextEditor);
+console.log(appState);

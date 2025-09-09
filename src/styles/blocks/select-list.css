@@ -1,10 +1,4 @@
 .select-list {
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
-}
-
-.select-list__items {
   border: 1px solid var(--color-border);
   overflow: hidden;
 }
@@ -28,10 +22,3 @@
 .select-list__item[aria-selected='true'] {
   background: var(--color-grey);
 }
-
-.select-list__controls {
-  display: flex;
-  column-gap: 4px;
-  align-self: flex-end;
-}
-

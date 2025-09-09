@@ -1,0 +1,33 @@
+.edit-panel {
+  display: flex;
+  flex-direction: column;
+  row-gap: 64px;
+}
+
+.edit-panel__inner {
+  display: contents;
+}
+
+.edit-panel__section {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}
+
+.edit-panel__heading {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.edit-panel__select-panel {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.edit-panel__select-controls {
+  display: flex;
+  column-gap: 4px;
+  align-self: flex-end;
+}
+
