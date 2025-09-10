@@ -57,7 +57,7 @@ class TextEditor extends HTMLElement {
     }
 
     //TODO: позже связать с кликом на элементе в редакторе, предусмотреть отписки
-    const dropdownPanel = new DropdownPanel(this.appState);
+    const dropdownPanel = new DropdownPanel(this.appState.inserted.dropdown);
     dropdownPanel.mount(this.elements.sidebar);
     //TODO: end
 

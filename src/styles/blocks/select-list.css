@@ -1,5 +1,4 @@
 .select-list {
-  border: 1px solid var(--color-border);
   overflow: hidden;
 }
 
@@ -9,10 +8,17 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+  border-left: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
 }
 
-.select-list__item:not(:last-child) {
+.select-list__item {
   border-bottom: 1px solid var(--color-border);
+  user-select: none;
+}
+
+.select-list__item:first-child {
+  border-top: 1px solid var(--color-border);
 }
 
 .select-list__item:hover {

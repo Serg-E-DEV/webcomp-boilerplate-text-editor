@@ -6,3 +6,7 @@
 
   font-family: inherit;
 }
+
+.base-input:disabled {
+  opacity: 0.2;
+}
