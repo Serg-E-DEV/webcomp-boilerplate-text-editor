@@ -8,5 +8,10 @@
 }
 
 .base-input:disabled {
-  opacity: 0.2;
+  opacity: 0.4;
+}
+
+.base-input:user-invalid {
+  outline-color: var(--color-red);
+  border: 2px solid var(--color-red);
 }
