@@ -1,6 +1,6 @@
-import dropdownPanelTpl from '../../templates/edit-panels/dropdown-panel.html';
-import {BaseEditPanel} from "./BaseEditPanel";
-import {getNextId, normalizeInput} from "../helpers";
+import dropdownPanelTpl from '@/templates/edit-panels/dropdown-panel.html';
+import {BaseEditPanel} from "@/components/BaseEditPanel";
+import {getNextId, normalizeInput} from "@/modules/helpers";
 
 export class DropdownPanel extends BaseEditPanel {
   constructor(state) {
