@@ -23,6 +23,13 @@ class TextEditor extends HTMLElement {
     this.templates = {
       appTpl: String(appTpl),
     }
+
+    this.appState.insertedUpdateTrigger = new Proxy(appState.insertedUpdateTrigger, {
+      set: (target, property, newValue, receiver) => {
+        this.appState.updateInserted();
+        return Reflect.set(target, property, newValue, receiver);
+      },
+    });
   }
 
   static get observedAttributes() {
@@ -50,21 +57,20 @@ class TextEditor extends HTMLElement {
       styles: this.shadowRoot.querySelector('style'),
       topbar: this.shadowRoot.querySelector('.js-topbar'),
       editorPanel: this.shadowRoot.querySelector('.js-editor-panel'),
-      // editor: this.shadowRoot.querySelector('.js-tinymce-editor'), /// TODO: удалить
       insertButtons: Array.from(this.shadowRoot.querySelectorAll('.js-insert-button')),
       sidebar: this.shadowRoot.querySelector('.js-sidebar'),
     }
 
-    //TODO: позже связать с кликом на элементе в редакторе, предусмотреть отписки
-    const dropdownPanel = new DropdownPanel(this.appState.dropdownItems);
-    dropdownPanel.mount(this.elements.sidebar);
-    //TODO: end
-
     const editorPanel = new EditorPanel();
     await editorPanel.mount(this.elements.editorPanel);
 
-    const insertPanel = new InsertPanel(appState, editorPanel.editor);
+    const insertPanel = new InsertPanel(this.appState, editorPanel.editor);
     insertPanel.mount(this.elements.topbar);
+
+    //TODO: позже связать с кликом на элементе в редакторе, предусмотреть отписки
+    const dropdownPanel = new DropdownPanel(this.appState, editorPanel.editor);
+    dropdownPanel.mount(this.elements.sidebar);
+    //TODO: end
 
     this.appStyles = this.appStyles.concat('\n', editorPanel.styles);
 

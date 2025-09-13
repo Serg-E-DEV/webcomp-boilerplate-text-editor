@@ -14,8 +14,7 @@ export class EditorPanel {
   #editor;
   #editorStyles;
 
-  constructor(state) {
-    this.state = state;
+  constructor() {
     this.root = null;
   }
 
@@ -96,5 +95,9 @@ export class EditorPanel {
       editor: editors[0],
       editorStyles,
     };
+  }
+
+  updateAllDropdowns() {
+    console.log('updateAllDropdowns');
   }
 }

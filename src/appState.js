@@ -34,6 +34,15 @@ export const appState = {
   inserted: {
     dropdowns: [],
     inputs: [],
-  }
+  },
+  insertedUpdateTrigger: {
+    timestamp: null,
+  },
+  updateInserted: (editor) => {
+    // noop
+    console.log('updateInserted');
+    console.log('editor', editor);
+  },
 }
+
 

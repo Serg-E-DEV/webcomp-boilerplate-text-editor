@@ -1,10 +1,11 @@
 export class BaseEditPanel {
-  constructor(state) {
+  constructor(state, editor) {
     this.state = state;
     this.root = null;
     this.elements = {};
     this.form = {};
     this.errors = {};
+    this.editor = editor;
   }
 
   render() {
@@ -40,6 +41,10 @@ export class BaseEditPanel {
       this.form[key] = null;
       this.errors[key] = null;
     });
+  }
+
+  triggerInsertedUpdate() {
+    this.state.insertedUpdateTrigger.timestamp = Date.now();
   }
 
   mount(container) {

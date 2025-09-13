@@ -35,6 +35,14 @@ export class InsertPanel {
     container.innerHTML = '';
     container.append(this.root);
     this.attachHandlers();
+
+    this.#insertInput(); //TODO: удалить
+    this.#insertInput();
+    this.#insertDropdown();
+    this.#insertDropdown();
+    this.#insertDropdown();
+    this.#insertDropdown();
+    this.#insertDropdown();
   }
 
   destroy() {
@@ -64,8 +72,10 @@ export class InsertPanel {
   #insertDropdown() {
     const id = getNextId(this.state.inserted.dropdowns);
 
+    const placeholder = `<option selected disabled hidden></option>`
     const options = this.state.dropdownItems.map(option => `<option data-id="${option.id}">${option.value}</option>`);
-    const dropdown = `<select data-id="${id}" data-type="dropdown">${options.join('')}</select>`;
+    options.unshift(placeholder);
+    const dropdown = `<select data-id="${id}" data-type="dropdown" data-error="false">${options.join('')}</select>`;
 
     this.state.inserted.dropdowns.push({id});
     this.editor.insertContent(dropdown);
@@ -75,7 +85,7 @@ export class InsertPanel {
     const id = getNextId(this.state.inserted.inputs);
 
     const value = `Поле ввода ${id}`;
-    const placeholder = 'Введите значение';
+    const placeholder = '';
 
     const input = `<input data-id="${id}" data-type="input" type="text" placeholder="${placeholder}" value="${value}" />`;
 

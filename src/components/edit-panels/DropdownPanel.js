@@ -3,9 +3,11 @@ import {BaseEditPanel} from "@/components/BaseEditPanel";
 import {getNextId, normalizeInput} from "@/modules/helpers";
 
 export class DropdownPanel extends BaseEditPanel {
-  constructor(state) {
-    super(state);
+  constructor(state, editor) {
+    super(state, editor);
     this.selectedId = null;
+    console.log(this.editor);
+    this.state.updateInserted = this.#updateInsertedDropdown(this.editor);
   }
 
   render() {
@@ -49,14 +51,16 @@ export class DropdownPanel extends BaseEditPanel {
   }
 
   addItem() {
-    const id = getNextId(this.state);
-    this.state.push({id: id, value: `Пункт ${id}`});
+    const id = getNextId(this.state.dropdownItems);
+    this.state.dropdownItems.push({id: id, value: `Пункт ${id}`});
+    this.triggerInsertedUpdate();
     this.update();
   }
 
   removeItem() {
-    this.state = this.state.filter(option => option.id !== this.selectedId);
+    this.state.dropdownItems = this.state.dropdownItems.filter(option => option.id !== this.selectedId);
     this.selectedId = null;
+    this.triggerInsertedUpdate();
     this.update();
   }
 
@@ -65,12 +69,19 @@ export class DropdownPanel extends BaseEditPanel {
     const isValid = this.validation();
 
     if (isValid) {
-      this.state = this.state.map(option => {
-        if (option.id === this.selectedId) {
-          return {...option, value: this.form.selectItemValue};
-        }
-        return option;
-      });
+      const index = this.state.dropdownItems.findIndex(option => option.id === this.selectedId);
+      const isChanged = this.state.dropdownItems[index].value !== this.form.selectItemValue;
+
+      if (index !== -1 && isChanged) {
+        this.state.dropdownItems = this.state.dropdownItems.map(option => {
+          if (option.id === this.selectedId) {
+            return {...option, value: this.form.selectItemValue};
+          }
+          return option;
+        });
+        this.triggerInsertedUpdate();
+      }
+
       requestAnimationFrame(() => {
         this.elements.editInput.blur();
       });
@@ -129,7 +140,7 @@ export class DropdownPanel extends BaseEditPanel {
   }
 
   #renderSelectList() {
-    const options = this.state.map(option => this.#renderSelectOption(option.id, option.value));
+    const options = this.state.dropdownItems.map(option => this.#renderSelectOption(option.id, option.value));
 
     return `
       <ul class="select-list js-select-list" role="listbox">${options.join('')}</ul>
@@ -137,7 +148,7 @@ export class DropdownPanel extends BaseEditPanel {
   }
 
   #updateSelectList(element) {
-    const updatedOptions = this.state.map(option => this.#renderSelectOption(option.id, option.value, option.id === this.selectedId));
+    const updatedOptions = this.state.dropdownItems.map(option => this.#renderSelectOption(option.id, option.value, option.id === this.selectedId));
     element.innerHTML = updatedOptions.join('');
   }
 
@@ -148,7 +159,7 @@ export class DropdownPanel extends BaseEditPanel {
   }
 
   #updateEditInput(element) {
-    const selected = this.state.find(option => option.id === this.selectedId);
+    const selected = this.state.dropdownItems.find(option => option.id === this.selectedId);
 
     element.value = String(this.form.selectItemValue ?? selected?.value ?? '');
     element.disabled = !Boolean(selected);
@@ -158,6 +169,58 @@ export class DropdownPanel extends BaseEditPanel {
       element.reportValidity();
     } else {
       element.setCustomValidity('');
+    }
+  }
+
+  #updateInsertedDropdown(editor) {
+    return () => {
+      const dropdowns = editor.getDoc().querySelectorAll(`[data-type='dropdown']`);
+
+      for (const dropdown of dropdowns) {
+        let isSelectedOptionDeleted = false;
+        let selectedOptionId = null;
+
+        if (dropdown.selectedIndex > 0) {
+          const dropdownItemsIds = this.state.dropdownItems.map(dropdownItem => dropdownItem.id);
+          const selectedOption = dropdown.options[dropdown.selectedIndex];
+          selectedOptionId = Number(selectedOption.dataset.id);
+          isSelectedOptionDeleted = dropdownItemsIds.includes(selectedOptionId) === false;
+        }
+
+        if (isSelectedOptionDeleted) {
+          dropdown.selectedIndex = 0;
+          dropdown.options[0].text = 'ERROR';
+          dropdown.dataset.error = 'true';
+        } else {
+          dropdown.options[0].text = '';
+          dropdown.dataset.error = 'false';
+        }
+
+        for (const [i, dropdownItem] of this.state.dropdownItems.entries()) {
+          // update options
+          const index = i + 1;
+          const option = dropdown.options[index];
+
+          if (option) {
+            option.text = dropdownItem.value;
+            option.setAttribute('data-id', String(dropdownItem.id));
+
+            if (selectedOptionId === dropdownItem.id) {
+              dropdown.selectedIndex = index;
+            }
+
+          } else {
+            const newOption = new Option(dropdownItem.value);
+            newOption.setAttribute('data-id', String(dropdownItem.id));
+            dropdown.add(newOption, index);
+          }
+        }
+
+        // remove unnecessary options
+        while (dropdown.options.length > this.state.dropdownItems.length + 1) {
+          dropdown.options.remove(dropdown.options.length - 1);
+        }
+      }
     }
   }
 }
