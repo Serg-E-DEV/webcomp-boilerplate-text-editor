@@ -1,3 +1,9 @@
+@import '@/styles/styles/scrollbar-style.css';
+
+:root {
+  --color-border: #1c1c1c66;
+}
+
 * {
   padding: 0;
   margin: 0;

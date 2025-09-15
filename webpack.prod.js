@@ -8,7 +8,7 @@ module.exports = {
   mode: 'production',
   entry: './src/index.js',
   output: {
-    filename: 'webcomp-boilerplate.min.js',
+    filename: 'webcomp-boilerplate-text-editor.min.js',
     path: path.resolve(__dirname, 'dist'),
   },
   module: {

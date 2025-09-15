@@ -1,16 +1,16 @@
 {
-  "title": "Hello-world",
-  "shortName": "hello-world-2",
-  "description": "Hello world simple webcomp example",
-  "descriptionAbstract": "Hello world simple webcomp example",
+  "title": "Text Editor",
+  "shortName": "text-editor",
+  "description": "Text editor webcomp",
+  "descriptionAbstract": "Text editor webcomp",
   "license": "AGPL-3.0-or-later",
-  "repositoryUrl": "https://your-repository.git",
+  "repositoryUrl": "https://github.com/Serg-E-DEV/webcomp-boilerplate-test-editor.git",
   "copyrightHolders": [
     {
-      "name": "NOI",
-      "email": "info@noi.bz.it",
-      "organization": "NOI S.p.A",
-      "organizationUrl": "https://noi.bz.it"
+      "name": "...",
+      "email": "...",
+      "organization": "...",
+      "organizationUrl": "..."
     }
   ],
   "authors": [
@@ -26,13 +26,13 @@
   "dist": {
     "basePath": "dist",
     "files": [
-      "webcomp-boilerplate.min.js"
+      "webcomp-boilerplate-text-editor.min.js"
     ],
     "scripts": [
     ]
   },
   "configuration": {
-    "tagName": "hello-world",
+    "tagName": "text-editor",
     "options": [
       {
         "key": "title",
@@ -40,7 +40,7 @@
         "label": "title of the web-comp",
         "required": false,
         "options": {
-          "default": "hello-world"
+          "default": "Text Editor"
         }
       }
     ]

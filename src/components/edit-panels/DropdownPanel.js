@@ -143,7 +143,7 @@ export class DropdownPanel extends BaseEditPanel {
     const options = this.state.dropdownItems.map(option => this.#renderSelectOption(option.id, option.value));
 
     return `
-      <ul class="select-list js-select-list" role="listbox">${options.join('')}</ul>
+      <ul class="select-list scrollbar-style js-select-list" role="listbox">${options.join('')}</ul>
   `;
   }
 

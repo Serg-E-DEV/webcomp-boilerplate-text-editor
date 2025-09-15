@@ -1,5 +1,6 @@
 .select-list {
-  overflow: hidden;
+  overflow: auto;
+  max-height: 448px;
 }
 
 .select-list__item {

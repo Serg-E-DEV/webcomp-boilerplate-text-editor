@@ -14,7 +14,8 @@ export class EditorPanel {
   #editor;
   #editorStyles;
 
-  constructor(openEditPanel) {
+  constructor(state, openEditPanel) {
+    this.state = state;
     this.root = null;
     this.openEditPanel = openEditPanel;
   }
@@ -29,6 +30,9 @@ export class EditorPanel {
   attachEditorHandlers() {
     this.editor.on('mousedown', (e) => {
       const insertedType = e.target.dataset.type;
+      if (!insertedType) {
+        return;
+      }
       this.openEditPanel(insertedType);
     });
   }
@@ -50,7 +54,11 @@ export class EditorPanel {
     this.#editor = editor;
     this.#editorStyles = editorStyles;
 
-    editor.setContent('<p>Ваш текст здесь...</p>');
+    editor.setContent(this.state.defaultEditorText.map(paragraph => `<p>${paragraph}</p>`).join(''));
+    const body = editor.getBody();
+    const lastNode = body.lastChild;
+    const textNode = lastNode.firstChild || lastNode;
+    editor.selection.setCursorLocation(textNode, textNode.textContent.length);
 
     this.attachEditorHandlers();
   }
@@ -83,8 +91,11 @@ export class EditorPanel {
           container.style.visibility = 'visible';
 
           const doc = editor.getDoc();
+          doc.documentElement.classList.add('scrollbar-style');
+
           const style = doc.createElement('style');
           style.textContent = textContentCSS;
+
           doc.head.appendChild(style);
         });
       },

@@ -3,8 +3,12 @@
     <div class="edit-panel__heading">Выбрать</div>
     <div class="edit-panel__select-panel">
       <div class="edit-panel__select-controls">
-        <button class="base-button base-button_square" type="button" data-action="add-item">+</button>
-        <button class="base-button base-button_square" type="button" data-action="remove-item" disabled>–</button>
+        <button class="base-button base-button_square" type="button" data-action="add-item">
+          <span class="base-button__icon base-button__icon_add"></span>
+        </button>
+        <button class="base-button base-button_square" type="button" data-action="remove-item" disabled>
+          <span class="base-button__icon base-button__icon_remove"></span>
+        </button>
       </div>
       {{ selectList }}
     </div>

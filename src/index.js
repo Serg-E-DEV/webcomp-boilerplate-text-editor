@@ -62,7 +62,7 @@ class TextEditor extends HTMLElement {
       sidebar: this.shadowRoot.querySelector('.js-sidebar'),
     }
 
-    const editorPanel = new EditorPanel(this.openEditPanel.bind(this));
+    const editorPanel = new EditorPanel(this.appState, this.openEditPanel.bind(this));
     await editorPanel.mount(this.elements.editorPanel);
     this.editor = editorPanel.editor;
 
