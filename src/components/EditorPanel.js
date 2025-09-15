@@ -14,8 +14,9 @@ export class EditorPanel {
   #editor;
   #editorStyles;
 
-  constructor() {
+  constructor(openEditPanel) {
     this.root = null;
+    this.openEditPanel = openEditPanel;
   }
 
   render() {
@@ -26,7 +27,10 @@ export class EditorPanel {
   }
 
   attachEditorHandlers() {
-
+    this.editor.on('mousedown', (e) => {
+      const insertedType = e.target.dataset.type;
+      this.openEditPanel(insertedType);
+    });
   }
 
   get editor() {
@@ -46,8 +50,7 @@ export class EditorPanel {
     this.#editor = editor;
     this.#editorStyles = editorStyles;
 
-    editor.setContent('<p>Начальный текст</p>');
-    this.#editor.body = editor.getBody();
+    editor.setContent('<p>Ваш текст здесь...</p>');
 
     this.attachEditorHandlers();
   }
@@ -69,7 +72,7 @@ export class EditorPanel {
       target: container,
       plugins: 'lists link code',
       toolbar: 'code | undo redo | bold italic underline | bullist numlist | link',
-      menubar: true,
+      menubar: false,
       height: 600,
       license_key: 'gpl',
       setup: (editor) => {
@@ -88,16 +91,12 @@ export class EditorPanel {
       skin: false,
       content_css: false,
       resize: false,
-      branding: false,
+      branding: true,
       promotion: false,
     });
     return {
       editor: editors[0],
       editorStyles,
     };
-  }
-
-  updateAllDropdowns() {
-    console.log('updateAllDropdowns');
   }
 }

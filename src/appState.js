@@ -40,8 +40,6 @@ export const appState = {
   },
   updateInserted: (editor) => {
     // noop
-    console.log('updateInserted');
-    console.log('editor', editor);
   },
 }
 

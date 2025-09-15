@@ -23,6 +23,8 @@ class TextEditor extends HTMLElement {
     this.templates = {
       appTpl: String(appTpl),
     }
+    this.editor = null;
+    this.currentEditPanel = null;
 
     this.appState.insertedUpdateTrigger = new Proxy(appState.insertedUpdateTrigger, {
       set: (target, property, newValue, receiver) => {
@@ -37,7 +39,6 @@ class TextEditor extends HTMLElement {
   }
 
   attributeChangedCallback(propName, oldValue, newValue) {
-    console.log(`Changing "${propName}" from "${oldValue}" to "${newValue}"`);
     if (propName === "title") {
       this.render();
     }
@@ -61,16 +62,12 @@ class TextEditor extends HTMLElement {
       sidebar: this.shadowRoot.querySelector('.js-sidebar'),
     }
 
-    const editorPanel = new EditorPanel();
+    const editorPanel = new EditorPanel(this.openEditPanel.bind(this));
     await editorPanel.mount(this.elements.editorPanel);
+    this.editor = editorPanel.editor;
 
-    const insertPanel = new InsertPanel(this.appState, editorPanel.editor);
+    const insertPanel = new InsertPanel(this.appState, this.editor);
     insertPanel.mount(this.elements.topbar);
-
-    //TODO: позже связать с кликом на элементе в редакторе, предусмотреть отписки
-    const dropdownPanel = new DropdownPanel(this.appState, editorPanel.editor);
-    dropdownPanel.mount(this.elements.sidebar);
-    //TODO: end
 
     this.appStyles = this.appStyles.concat('\n', editorPanel.styles);
 
@@ -84,7 +81,23 @@ class TextEditor extends HTMLElement {
   render() {
     this.shadowRoot.innerHTML = this.templates.appTpl;
   }
+
+  openEditPanel(type) {
+    if (this.currentEditPanel) {
+      this.currentEditPanel.destroy();
+      this.elements.sidebar.innerHTML = '';
+      this.currentEditPanel = null;
+    }
+
+    switch (type) {
+      case 'dropdown':
+        this.currentEditPanel = new DropdownPanel(this.editor);
+        this.currentEditPanel.mount(this.elements.sidebar);
+        break;
+      default:
+        break;
+    }
+  }
 }
 
 customElements.define('text-editor', TextEditor);
-console.log(appState);

@@ -3,11 +3,11 @@ import {BaseEditPanel} from "@/components/BaseEditPanel";
 import {getNextId, normalizeInput} from "@/modules/helpers";
 
 export class DropdownPanel extends BaseEditPanel {
-  constructor(state, editor) {
-    super(state, editor);
+  constructor(editor) {
+    super(editor);
     this.selectedId = null;
-    console.log(this.editor);
     this.state.updateInserted = this.#updateInsertedDropdown(this.editor);
+    this.type = 'dropdown';
   }
 
   render() {
@@ -174,7 +174,7 @@ export class DropdownPanel extends BaseEditPanel {
 
   #updateInsertedDropdown(editor) {
     return () => {
-      const dropdowns = editor.getDoc().querySelectorAll(`[data-type='dropdown']`);
+      const dropdowns = editor.getDoc().querySelectorAll(`[data-type='${this.type}']`);
 
       for (const dropdown of dropdowns) {
         let isSelectedOptionDeleted = false;

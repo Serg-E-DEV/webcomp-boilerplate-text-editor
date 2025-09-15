@@ -35,14 +35,6 @@ export class InsertPanel {
     container.innerHTML = '';
     container.append(this.root);
     this.attachHandlers();
-
-    this.#insertInput(); //TODO: удалить
-    this.#insertInput();
-    this.#insertDropdown();
-    this.#insertDropdown();
-    this.#insertDropdown();
-    this.#insertDropdown();
-    this.#insertDropdown();
   }
 
   destroy() {

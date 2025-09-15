@@ -1,11 +1,16 @@
+import {appState} from "@/appState";
+
 export class BaseEditPanel {
-  constructor(state, editor) {
-    this.state = state;
+  #type;
+
+  constructor(editor) {
+    this.state = appState;
     this.root = null;
     this.elements = {};
     this.form = {};
     this.errors = {};
     this.editor = editor;
+    this.#type = null;
   }
 
   render() {
@@ -62,5 +67,13 @@ export class BaseEditPanel {
       this.root.remove();
       this.root = null;
     }
+  }
+
+  get type() {
+    return this.#type
+  }
+
+  set type(value) {
+    this.#type = value;
   }
 }
